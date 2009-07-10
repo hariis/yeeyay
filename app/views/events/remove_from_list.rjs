@@ -1,0 +1,19 @@
+if @remove
+     dom_id = "#{@saved_event.id}" 
+     page.visual_effect :blind_up, dom_id, :duration => 3.0
+     page.delay(5) do
+          page.remove  dom_id
+     end
+     page.replace_html('heading', "My Saved Events (" + "#{@events.size.to_s}" + ")" )
+     page.visual_effect :highlight, 'heading'
+     page.replace_html('saved-events', :partial => 'update_saved_events' )
+     page.visual_effect :highlight, 'saved-events'
+elsif @saved_event
+    select_dom_id = "prompt_#{@saved_event.id }"      
+    page.replace_html(select_dom_id, :partial => 'save_this_venue', :object => @saved_event)
+    remove_prompt_id = "remove_" + select_dom_id
+    page.replace_html(remove_prompt_id, "")  
+end
+
+
+

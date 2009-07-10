@@ -1,0 +1,8 @@
+production:
+  :address: smtp.yeeyay.com
+  :port: 25
+  :authentication: plain
+  :user_name: admin
+  :password: test
+
+

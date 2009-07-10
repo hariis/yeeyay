@@ -1,0 +1,16 @@
+<div id="errorExplanation" class="errorExplanation">
+<h2>This Event has already been added by a memeber.</h2>
+<p>Please check it out</p>
+
+</div>
+
+<div id="show-venue-details">
+<div class='show-venue-name'><%= link_to @event.dup_event.title.capitalize, event_url(@event.dup_event) %></div>
+<div id="edit-venue">
+    <%= link_to_if(@event.dup_event.created_by?(current_user), "Edit this Event", edit_event_path(@event.dup_event)) %>
+</div>
+<div class='venue-description'>What: <%= @event.dup_event.details.capitalize %></div>
+<div class='event-location'>Where: <%= @event.dup_event.venue.name + "<br/>" + @event.dup_event.venue.street_address %></div>
+<div class='event-schedule'>When: <%= display_schedule(@event.dup_event) %> </div>
+<div class='venue-categories'>Categories: <%= @event.dup_event.display_categories %></div>
+</div> 

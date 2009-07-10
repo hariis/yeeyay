@@ -1,0 +1,10 @@
+<% if !@event.created_by?(current_user) %>
+   <%= render :text => "Only the member that added this event can edit. <br/> If you feel the information is incorrect, please contact us." %>
+<% else %> 
+<div id="new-form-entry">
+<div id="heading">Editing <i><%= @event.title %></i></div>
+
+<%= render :partial => 'event_form' , :locals => {:event => @event} %>
+</div>
+
+<% end %>

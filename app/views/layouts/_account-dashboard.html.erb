@@ -1,0 +1,31 @@
+<% if !current_user %>
+  <div id="non-member" class="corner-all">
+  <li> <%= link_to "Register", new_account_path %> |</li>
+  <li> <%= link_to "Log In", new_user_session_path %> |</li>
+  <li> <%= link_to "Forgot password", new_password_reset_path %></li>
+</div>
+<% else %>
+  <div id="account-name"   class="corner-all">
+    <li> Welcome <%= current_user.login %></li>
+  </div>
+  <div id="account-info"   class="corner-all">    
+    <li> <%= link_to "My Account", account_path %> |</li>
+     <li id="saved-venues">
+                    <% if current_user.venues_to_visit.size > 0 %>        <span style="font-weight:bold">      <% end %>  
+                   <%= link_to  "My Saved Venues (#{current_user.venues_to_visit.size})", saved_venues_venues_path   %> | 
+                   <% if current_user.venues_to_visit.size > 0 %>        </span>      <% end %> 
+      </li>
+      <li id="saved-events">
+              <% if current_user.events_to_visit.size > 0 %>        <span style="font-weight:bold">      <% end %>  
+              <%= link_to "My Saved Events (#{current_user.events_to_visit.size})", saved_events_events_path       %> | 
+              <% if current_user.events_to_visit.size > 0 %>        </span>      <% end %> 
+      </li>
+   <li> <%= link_to "Logout", user_session_path, :method => :delete, :confirm => "Are you sure you want to logout?" %></li>
+   </div>
+    <div id="user-actions"   class="corner-all">
+    <li> <%= link_to 'Search', venues_path  %> | </li>
+    <li> <%= link_to 'Add New Venue', new_venue_path %> | </li>
+    <li> <%= link_to 'Add New Event', new_event_path %></li>  
+  </div>
+  
+<% end %>

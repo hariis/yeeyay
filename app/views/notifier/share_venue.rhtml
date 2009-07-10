@@ -1,0 +1,32 @@
+<div style="font-family:Georgia;margin: 10%;">
+
+Hi! <br/> 
+<p> 
+I found this venue today on YeeYaY and thought you might find it interesting.
+  </p> 
+ <br/>
+ <p> The details:  </p> 
+ <p> 
+Name:
+  <%= link_to @name, @yeeyay_url %>
+  </p> 
+ <p>
+Website:
+  <%= link_to @url, @url %>  
+  </p> 
+ <br/>
+<p>
+  My Comments:
+  <%= @mycomments %>
+ </p>  
+   <br/> <br/>
+Enjoy! <br/>
+-<%= @sender %>
+ 
+ <p>
+ <hr/>
+ <h4 style="color:#0077BB;font-family:helvetica;"><em>Sent via</em> <%= link_to " YeeYaY", "http://www.yeeyay.com" %> </h4>
+<h5 style="color:#80C00C;font-family:helvetica;"><i>where kids have fun </i></h5>
+ <hr/>
+</p>
+</div>

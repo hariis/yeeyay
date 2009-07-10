@@ -1,0 +1,71 @@
+<%= GMap.header %>
+<%= @map.to_html if @map != nil %>
+
+<div id="search-results">
+ 
+<% count_s = @events ?  pluralize(@events.size, 'Event' ) : "None" %>
+<% cat_s = @categories == "" ?  "   <span class='keyword-highlight'>(No categories chosen)</span>"  : " related to " + "<span class='keyword-highlight'>"  + @categories + "</span>" %>
+<div id="heading"> <%= count_s + " happening around " + "<span class='keyword-highlight'>" + @zipcode + " in the next week "+"</span>" + cat_s   %> </div>
+
+<!-- This is the element in which the map will be displayed. -->
+<% if @events.size > 0 %>
+<%= @map.to_html %>
+ <%= @map.div(:width => 400, :height => 300) %>
+ <% end %>
+ 
+<% if current_user %>
+   <div id="event-notify" class ='corner-all' >
+            <% if current_user.is_subscribed_to_events(@query_id) %>
+              You are already subscribed to this query.
+            <% else %>
+                <%= link_to_remote "Notify", :url => {:action => 'notify', :query_id => @query_id, :count => @events.size } %>
+              me when more venues are added for this search query.
+            <% end %>
+      </div>
+<% else %>
+    
+    <!-- TODO For non-members-->
+  
+  <% end %>
+<div id="event-listings">
+         <% @events_calendar.each do |daysevents| %>
+              <% date = daysevents[0] %>
+              <% events = daysevents[1] %>
+             <div class="daysevents  user-event-list  ui-corner-all">
+             <div class="box-heading  event-heading  ui-corner-all">
+                <% if date == Time.now.to_date %>
+                  <%= "Today" %>
+                <% elsif date == Time.now.to_date + 1 %>
+                  <%= "Tomorrow" %>
+                <% else %>
+                    <%= date.to_s(:short) %>
+                <% end %>
+              </div>
+              <ul id=for_<%= date.to_s %>>              
+                  <% events.each do |e | %>                      
+                        <li>
+                        <% domid = "#dialog_" + e.id.to_s  %>
+                        <a href="#" OnClick="DoAction('<%= domid %>');">
+                        <%= e.title.capitalize %></a> 
+                            <% if current_user && e.is_saved_by(current_user) %>
+                              <span class="save-event-listing-status save-event-status corner-all">saved</span>                      
+                            <% end %>      
+                        </li>
+                      <!-- ui-dialog -->
+                      <div id="dialog_<%= e.id.to_s %>" title="<%= e.title.capitalize %>" style="display: none;">                              
+                      <ul class="mini-details">
+                            <li class='venue-description'><span class="lead">What: </span><span class="follow"> <%= link_to e.details.capitalize, event_path(e) %></span></li>
+                            <li class='event-location'><span class="lead">Where:</span><span class="follow"> <%= e.venue.name + "<br/>" + e.venue.street_address %></span></li>
+                            <li class='event-schedule'><span class="lead">When:</span><span class="follow"> <%= display_schedule(e) %></span> </li>
+                                              
+                      </ul>
+                      </div>              
+                     
+                  <% end %>              
+            </ul>
+            </div>
+            <% end %>         
+</div>
+
+ 
+</div>

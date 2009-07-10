@@ -1,0 +1,12 @@
+<% categories.each do |item| %>
+    <% group = item[0] %>
+    <% categories = item[1] %>
+    <div id=new_group_<%= group %>>
+         <% categories.sort.each do |cat | %>
+           <% cat_id = cat[0] %>
+           <% cat_name = cat[1] %>
+            <%= check_box_tag controller_name.singularize.to_s + "[category_ids][]", cat_id,  @model_name.categories.collect{|cats| cats.id}.include?(cat_id) -%>
+            <%= h cat_name %><br/>
+        <% end %>
+    </div>
+<% end %>  

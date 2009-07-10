@@ -1,0 +1,47 @@
+<% form_for(venue) do |f| %>
+  <%= f.error_messages :header_message => "Oops - We couldn't save the venue!",
+    :message => "Please check the following field(s)" %>
+  <div id='venue-basic'>
+  <p><%= f.label :name -%><br/>
+  <%= f.text_field :name, :size => '66',:maxlength => '50'  -%>
+  </p>
+  <p><%= f.label :description -%><br/>
+  <%= f.text_area :description, :rows => '5',:cols => '63' -%>
+  </p>
+ 
+  <p><%= f.label :street_address , 'Street Address' -%><br/>
+  <%= f.text_field :street_address, :size => '66',:maxlength => '70' -%>
+  </p>
+  
+  <p><%= f.label :url , 'Website' -%><br/>
+  <%= f.text_field :url , :size => '66',:maxlength => '70' -%>
+  </p>
+  <p><%= f.label :phone , 'Contact Phone' -%><br/>
+  <%= f.text_field :phone , :size => '15',:maxlength => '12' -%>
+  ( just the 10 digits - no hypens or braces )
+  </p>
+  <p><%= f.label :email , 'Contact Email' -%><br/>
+  <%= f.text_field :email , :size => '66',:maxlength => '70' -%>
+  </p>
+           <div>
+          <% if controller.action_name == 'new' %>
+                <%= f.submit "Add Venue", :class => "ui-state-default ui-corner-all"  -%>             
+          <% else %>                
+                <%= f.submit "Update Venue" -%>                
+          <% end %>
+           or   <%= link_to 'Cancel', venues_path %>   
+          </div>
+  </div>
+  <div id='venue-advanced'>
+  <p>
+        <%= f.label :category , 'What Kind of a Venue is this?' -%><br/>
+       <% @model_name = venue %>
+       <%= render :partial => 'shared/display_new_cat' , :locals => {:categories => @categories} %> 
+  
+  </p>
+  </div>
+
+  
+<% end %>
+
+

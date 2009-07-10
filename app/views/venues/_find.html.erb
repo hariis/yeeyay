@@ -1,0 +1,9 @@
+<div id="heading">Results</div>
+
+<% for venue in venues %>
+<div class='venue-listing'>
+<div class='venue-name'><%= venue.name %><span style ="font-size:10px;margin-left:30px;"> </span>  </div>
+<div class='venue-description'><%= venue.description %></div>
+<div class='venue-categories'>Categories: <%= venue.categories.collect{|t| t.name}.join("," ) %></div>
+</div>
+<% end %>

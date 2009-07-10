@@ -1,0 +1,9 @@
+if @saved_venue
+    select_dom_id = "prompt_#{@saved_venue.id }"
+    page.replace_html(select_dom_id, "<span class='save-status'>saved</span>") 
+    page.replace_html('saved-venues', :partial => 'update_saved_venues' )
+    page.visual_effect :highlight, 'saved-venues'
+    #remove_prompt_id = "remove_" + select_dom_id
+    #page.replace_html(remove_prompt_id, :partial => 'remove_this_venue', :object => @saved_venue_entry)    
+end
+

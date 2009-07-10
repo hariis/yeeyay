@@ -1,0 +1,32 @@
+
+<% if @freqintervals %>		     
+  
+        <div id="starts">
+                <p><%= label_tag 'starts', 'From' %></p>
+		<div id="cal">
+		<span	class="formw">	<%= calendar_date_select_tag "start", @start, :time => false  %></span>
+		</div>
+	</div>
+	<div id="ends">
+		 <p><%= label_tag 'ends', 'To' %></p>	
+		<div id="cal">
+		<span	class="formw">	<%= calendar_date_select_tag "end", @end, :time => false %></span>
+		</div>
+	</div>
+      <div>
+          <span	class="formw"><%= select_tag 'freq_interval',    options_for_select(  @freqintervals.sort{|v1,v2| v1[0].to_i<=>v2[0].to_i}.collect{|k| [ k[1],k[0] ]} ,"#{@freq_interval_selected}" ) %></span><br/> 
+           <% if @freqintervalsqual %>  
+                  on
+                   <span	class="formw"><%= select_tag 'freq_interval_details[]',    options_for_select(@freqintervalsqual.sort{|v1,v2| v1[0].to_i<=>v2[0].to_i}.collect{|k| [ k[1],k[0] ]} , "#{@freqintervalsqual_selected}" ),  { :multiple => true, :size =>7 } %> </span>
+            <% end %>
+      </div>
+<% else %>
+	<p>
+        <%= label_tag 'starts', 'On' %><br/>
+        <%= calendar_date_select_tag "start", @start, :time => false  %>
+    </p>
+      
+<% end %>
+
+
+

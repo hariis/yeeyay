@@ -1,0 +1,24 @@
+Hello <%= user.name %>,
+
+
+You had asked to be notified if any venue(s) got added to the query you had made earlier.
+
+Well, it appears 
+1 or more venue(s) have been added that qualifies for your search queries:
+
+<ul>
+<% @queries.each do |query| %>
+    <% items = query.split('+')  if query != ""  %>
+    cat_names =""
+    <% 1.upto(items.size - 2) { |i| cat_names += i  + " , " } if items.size > 2 %>
+    <% cat_names.length == 0 ? cat_names = "All" :  cat_names.chomp!(" ,") %>
+    <li> <%= "Zipcode: " + items[0] +  "<i>"   +" Categories: " + cat_names +  "</i>" %> 
+  <%= link_to "Check it out", items[items.size - 1],  :popup => true %>
+    </li>
+ <% end %>
+</ul>
+
+Check them out by clicking the links above or by visiting your profile page at 
+http://www.yeeyay.com/<%= user.name %>
+
+-YeeYaY Team

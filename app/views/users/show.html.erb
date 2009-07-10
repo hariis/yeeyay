@@ -1,0 +1,58 @@
+<div id="new-form-entry">
+<h3 id="heading" class="ui-widget-header ui-corner-all">My Account </h3>
+<p>
+</p>
+<p>
+  <b>Login:</b>
+  <%=h @user.login %>
+</p>
+ 
+<p>
+  <b>Email:</b>
+  <%=h @user.email %>
+</p>
+ 
+
+<p>
+  <b>Last login at:</b>
+  <%=h @user.last_login_at %>
+</p>
+<p>
+  <span class="ui-widget-header ui-corner-all"><%= pluralize User.logged_in.count, "user" %> currently logged in <!-- This based on last_request_at, if they were active < 10 minutes they are logged in --> </span>
+</p> 
+<%= button_to 'Edit', edit_account_path, :method => 'get' %>
+
+ <div class="reco-list user-venue-list">
+<div class="box-heading venue-heading">Favorite Venues</div>
+<ul>
+<% Venue.recommended_by(@user).each do |venue| %>
+   <li class='venue-name'><%= link_to venue.name.capitalize, venue_path(venue) %><span style ="font-size:10px;margin-left:30px;"> </span>  </li>
+ <% end %>
+ </ul>
+</div>
+<div class="submitted-list user-venue-list">
+<div class="box-heading venue-heading">Submitted Venues</div>
+<ul>
+<% Venue.added_by(@user).each do |venue| %>
+   <li class='venue-name'><%= link_to venue.name.capitalize, venue_path(venue) %><span style ="font-size:10px;margin-left:30px;"> </span>  </li>
+ <% end %>
+ </ul>
+</div>
+
+<div class="reco-list user-event-list">
+<div class="box-heading event-heading">Favorite Events</div>
+<ul>
+<% Event.recommended_by(@user).each do |event| %>
+   <li class='venue-name'><%= link_to event.title.capitalize, event_path(event) %><span style ="font-size:10px;margin-left:30px;"> </span>  </li>
+ <% end %>
+ </ul>
+</div>
+<div class="submitted-list user-event-list">
+<div class="box-heading event-heading">Submitted Events</div>
+<ul>
+<% Event.added_by(@user).each do |event| %>
+   <li class='venue-name'><%= link_to event.title.capitalize, event_path(event) %><span style ="font-size:10px;margin-left:30px;"> </span>  </li>
+ <% end %>
+ </ul>
+</div>
+</div>

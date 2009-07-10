@@ -1,0 +1,6 @@
+
+dom_id = "ratings-area_#{@venue.id}"
+page.replace_html(dom_id, render_rating(@venue,false))
+
+prompt_dom_id = "prompt_#{@venue.id}"
+page.replace_html(prompt_dom_id, "<i>Thank You!</i>")

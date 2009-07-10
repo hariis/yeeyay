@@ -1,0 +1,48 @@
+Science & Technology
+Ex: TechStart Education Foundation
+February 28, 2008 
+     Willamette University -TechStart Programming Contest 
+     Programming Contest for Students 
+
+Saturday, May 16, 2009 
+     Oregon Game Project Challenge (ogpc 2.0) 
+     Game Programming Contest for Students
+
+greattrainexpo.com
+
+
+Gems Plugins used
+
+geokit
+calendar_date_select
+authlogic - on vendor/gems
+mysql 
+copy over libmysql.dll to c:\ruby\bin
+
+
+Background processing
+At 12AM, daemon has to 
+clear the flag for all events
+look at current events and flag them if due today (update due_today)
+
+Still TODO
+
+Search venue by venue name
+search for events - find feature - how will the user find events
+search by event name
+
+Implement memcache
+
+calendar - color change
+
+rename is_due_today to this_week_status
+add is_due_today? method
+
+Get the events attended/attending (Add to My List) and 
+events_attending (for MyAccount, MyWidget) 
+venues_attending
+
+events already exists logic - inefficiency
+When the model_auto_completer works, the Venue.find_by_name can be removed
+venue already exists logic - inefficiency
+same location when geocoded gives diff values for latitude and longitude

@@ -1,0 +1,26 @@
+<% if !@event_review.created_by?(current_user) %>
+   <%= render :text => "Only the member that added this review can edit. <br/> If you feel the information is incorrect, please contact us." %>
+<% else %>  
+<div id="new-form-entry">
+<div id="heading">Update your Review for <i><%= @event.title.capitalize %></i></div>
+
+<% form_for([@event, @event_review]) do |f| %>
+  <%= f.error_messages :header_message => "Oops - We couldn't update your review!",
+    :message => "Please check the following field(s)" %>
+
+  <p><%= f.label :title, "A brief Title" -%><br/>
+  <%= f.text_field :title, :size => '66',:maxlength => '50'  -%>
+  </p>
+  <p><%= f.label :details, "Your Experience" -%><br/>
+  <%=  f.text_area :details, :rows => '5',:cols => '63'  -%>
+  </p>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Cancel', event_path(@event) %>
+</div>
+
+<% end %>

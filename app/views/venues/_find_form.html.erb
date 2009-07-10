@@ -1,0 +1,37 @@
+<div id="find-form">
+  <div id="search-heading">Find Venues</div>
+<% form_tag(find_venues_path , :method => "get", :id => 'find_input') do -%>
+  
+  <div id='zip-display'><p><span style ="font-size:14px;text-align:center;font-weight:bold;letter-spacing:1px;">Your Zipcode: </span>
+  <%= text_field_tag :zipcode, "" , :size => 7, :maxlength => 5 %> 
+  
+  <button  id="button" class="ui-state-default ui-corner-all" type="button">Next >></button>
+  </div>
+<div class="toggler">
+  <div id='category-display' style="display: none;" class="ui-widget-content ui-corner-all">
+          <p>          
+          <h3 class="ui-widget-header ui-corner-all">What kind of a Venue are you looking for? </h3>
+     
+            <% Category.for_venues_by_groups.each do |item| %>
+              <% group = item[0] %>
+              <% categories = item[1] %>
+              <div id=group_<%= group %>>
+                  <% categories.sort.each do |cat | %>
+                     <% cat_id = cat[0] %>
+                     <% cat_name = cat[1] %>
+                      <%= check_box_tag 'venue[category_ids][]', cat_id -%>
+                      <%= h cat_name %><br/>
+                  <% end %>
+              </div>
+            <% end %>         
+          </p>
+          <div style ="clear:both;">
+        <%= submit_tag 'Find Venues >>' , :name => nil,:disable_with => "Finding...", :class => "find-button ui-state-default ui-corner-all" %>
+        </div>
+
+ </div> 
+ </div>
+  <% end -%>                
+</div>
+
+

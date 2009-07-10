@@ -1,0 +1,57 @@
+<%= GMap.header %>
+<%= @map.to_html if @map != nil %>
+
+<div id="search-results">
+  
+<% count = @events ?  @events.size : 0 %>
+<div id="heading"> <%= "My Saved Events (" + count.to_s + ")"   %> </div>
+
+<!-- This is the element in which the map will be displayed. -->
+<% if @events.size > 0 %>
+<%= @map.to_html %>
+ <%= @map.div(:width => 400, :height => 300) %>
+<% end %> 
+
+    <ul id="listings">
+                
+      <% for event in @events %>          
+
+            <li id= "<%= event.id %>" class ="<%= cycle('venue-listing-odd', 'venue-listing-even') %>">
+                    <div class='venue-name'><%= link_to event.title.capitalize, event_path(event) %></div>
+                                 
+                    <!-- Details -->
+                    <div id="item-actions"  class="corner-all">
+                      <ul>
+                           <% if current_user %>
+                              <li id='remove_prompt_<%= event.id %>'>              
+                                        <% if event.is_saved_by(current_user) %>                        
+                                            <%= link_to_remote "Remove", :url => {:action => 'remove_from_list', :event_id => event.id, :remove => 'true'} %> |
+                                        <% end %>          
+                             </li>                            
+                            <% end %>
+                           <li>
+                              <%= link_to_if(current_user && event.created_by?(current_user), "Edit", edit_event_path(event))  do  
+                                                            ""
+                               end %> 
+                           </li>
+                     </ul>
+                  </div>
+<div class='venue-description'>What: <%= event.details.capitalize %></div>
+<div class='event-location'>Where: <%= event.venue.name + "<br/>" + event.venue.street_address %></div>
+<div class='event-schedule'>When: <%= display_schedule(event) %> </div>
+<div class='venue-categories'>Categories: <%= event.display_categories %></div>
+
+<div id="ratings-area_<%= event.id %>" class="ratings-area">
+<%= render_rating(event) %>
+</div>
+
+<% if current_user && event.can_write_review(current_user.id) %>
+<%= button_to(  "Write your Review", new_event_event_review_path(event), :method => :get) %>
+<% end %>
+
+                </li>
+      <% end %>
+    </ul>                
+ </div>          
+
+
