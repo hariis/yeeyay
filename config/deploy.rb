@@ -1,7 +1,7 @@
 default_run_options[:pty] =  true
 set :application, "yeeyay"
 set :repository, "git@github.com:hariis/yeeyay.git"
-#set :user , "hariis"
+set :user , "hariis"
 #set :branch, "railsrumble"
 
 role :app, "209.20.69.173"
