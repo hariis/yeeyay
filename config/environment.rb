@@ -73,7 +73,8 @@ Rails::Initializer.run do |config|
   # Please note that observers generated using script/generate observer need to have an _observer suffix
   # config.active_record.observers = :cacher, :garbage_collector, :forum_observer  
 
-  #config.action_view.erb_trim_mode = ">"  
+  #config.action_view.erb_trim_mode = ">" 
+  config.gem "andre-geokit"  
   config.gem "authlogic"
   config.gem "calendar_date_select"
   config.gem "chronic"
