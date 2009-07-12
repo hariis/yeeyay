@@ -12,12 +12,9 @@
 <%= @map.to_html %>
  <%= @map.div(:width => 400, :height => 300) %>
 <% end %> 
-
-    <ul id="listings">
-                
-      <% for venue in @venues %>          
-
-            <li id= "<%= venue.id %>" class ="<%= cycle('venue-listing-odd', 'venue-listing-even') %>">
+    <ul id="listings">                
+      <% for venue in @venues %>    
+               <li id= "<%= venue.id %>" class ="<%= cycle('venue-listing-odd', 'venue-listing-even') %>">
                     <div class='venue-name'><%= link_to venue.name.capitalize, venue_path(venue) %></div>
                     <% if current_user %>
                           <div id='prompt_<%= venue.id %>' class="save-prompt">  
@@ -51,16 +48,11 @@
                        <%= link_to_if(current_user && venue.can_write_review(current_user.id), "Write yours", venue_path(venue)) do
                             ""
                           end
-                       %>                          
-
-                    </div>
-
-            </li>            
-
-    <% end %>
-  </ul>       
-
-
+                       %> 
+            </div>
+            </li>   
+<% end %>
+  </ul>  
  <% if current_user %>
    <div id="notify" class ='corner-all' >
             <% if current_user.is_subscribed_to_venues(@query_id) %>
@@ -70,12 +62,6 @@
               me when more venues are added for this search query.
             <% end %>
       </div>
-<% else %>
-    
-    <!-- TODO For non-members-->
-  
+<% else %>    <!-- TODO For non-members-->  
   <% end %>
-
-
-
 </div>
