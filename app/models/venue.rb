@@ -18,7 +18,7 @@ class Venue < ActiveRecord::Base
   end
   attr_accessor :emails, :comments
   def venue_already_exists?
-    venue_exists = Venue.find(:first, :conditions => ['latitude BETWEEN ? and ? and longitude BETWEEN ? and ?',latitude - 0.1,latitude + 0.1,longitude - 0.1, longitude + 0.1])
+    venue_exists = Venue.find(:first, :conditions => ['latitude BETWEEN ? and ? and longitude BETWEEN ? and ?',latitude - 0.05,latitude + 0.05,longitude - 0.05, longitude + 0.05])
     venue_exists != nil
   end
   def created_by?(a_user)
