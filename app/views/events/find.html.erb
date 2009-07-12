@@ -28,6 +28,7 @@
   
   <% end %>
 <div id="event-listings">
+<% if @events_calendar != nil %>
          <% @events_calendar.each do |daysevents| %>
               <% date = daysevents[0] %>
               <% events = daysevents[1] %>
@@ -65,6 +66,7 @@
             </ul>
             </div>
             <% end %>         
+   <% end %>
 </div>
 
  
