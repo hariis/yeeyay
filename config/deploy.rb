@@ -1,4 +1,4 @@
-default_run_options[:pty] =  true
+default_run_options[:pty] =  true   #REASON: http://www.mail-archive.com/capistrano@googlegroups.com/msg02817.html
 set :application, "yeeyay"
 set :repository, "git@github.com:hariis/yeeyay.git"
 set :user , "hariis"
