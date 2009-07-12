@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   end
   
   def is_subscribed_to_venues(query_id)
-    notification  = Notification.find_by_query_id(query_id) 
+    notification  = VenueNotification.find_by_query_id(query_id) 
     if notification
       if notification.users.find(id) != nil
 	return true
