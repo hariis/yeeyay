@@ -1,4 +1,11 @@
 <div id="new-form-entry">
-<div id="heading">Add New Venue</div>
+<div id="heading">
+  <% if @add_location %>
+    Add New Location
+  <% else %>
+    Add New Venue
+  <% end %>
+  
+  </div>
 <%= render :partial => 'venue_form' , :locals => {:venue => @venue} %>
 </div>

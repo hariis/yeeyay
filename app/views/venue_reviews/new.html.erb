@@ -1,5 +1,5 @@
 <div id="new-form-entry">
-<div id="heading">Write a Review for <i><%= @venue.name.capitalize %></i></div>
+<div id="heading">Write a Review for <i><%= @venue.name %></i></div>
 
 <% form_for([@venue, @venue_review]) do |f| %>
   <%= f.error_messages :header_message => "Oops - We couldn't save your review!",

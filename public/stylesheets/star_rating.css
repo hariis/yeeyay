@@ -34,6 +34,10 @@
 .star-rating a:active,
 .star-rating a:focus{
 	background-position: left bottom;
+        padding: 0px;
+}
+.star-rating a, .star-rating a:visited {
+    padding: 0px;
 }
 .star-rating a.one-star{
 	width:20%;
@@ -91,7 +95,7 @@ color: green;
 }
 .ratings-area {
 background-color: #ffffff;
-margin-top: 5px;
+margin: 5px 0;
 padding: 2px;
 clear: both;
 }

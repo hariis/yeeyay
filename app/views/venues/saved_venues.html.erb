@@ -17,7 +17,7 @@
       <% for venue in @venues %>          
 
             <li id= "<%= venue.id %>" class ="<%= cycle('venue-listing-odd', 'venue-listing-even') %>">
-                    <div class='venue-name'><%= link_to venue.name.capitalize, venue_path(venue) %></div>
+                    <div class='venue-name'><%= link_to venue.name, venue_path(venue) %></div>
                     <% if current_user %>                          
                           <div id='remove_prompt_<%= venue.id %>'  class="save-prompt">
                                 <% if venue.is_saved_by(current_user) %>                        

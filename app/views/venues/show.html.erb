@@ -1,20 +1,20 @@
 <div id="show-venue-details">
-<div class='show-venue-name'><%= @venue.name.capitalize %></div>
-<div id="item-actions"  class="corner-all">
-  <ul>
+<div class='show-venue-name'><%= @venue.name %></div>
+<div id='prompt_<%= @venue.id %>' class="owner-actions corner-all">
+  
        <% if current_user %>
-          <li  id='prompt_<%= @venue.id %>'>              
+                     
                     <% if @venue.is_saved_by(current_user) %>
                       <span class="save-event-status">saved</span>                        
                     <% else %> 
                       <%= link_to_remote "Save", :url => {:action => 'save_to_list', :id => @venue.id} %>                        
                     <% end %>               
-          </li>
+          
          
         <% else %>
-            <div id='prompt_<%= @venue.id %>'>                      
+                               
             <a href="#" OnClick="PromptSignup();">Save</a>
-            </div>
+           
           <!-- ui-dialog -->
           <div id="prompt-signup" title="Sign up or Login" style="display: none;">                              
                   You need an account to save this venue. <br/><br/>
@@ -23,14 +23,30 @@
           </div>
         <% end %>
 
-</ul>
+
 </div>
-<div id="item-actions"  class="corner-all"> 
+<div class="owner-actions corner-all"> 
 <%= link_to_if(current_user && @venue.created_by?(current_user), "Edit", edit_venue_path(@venue)) do "" end %>
  </div>
-
+<div class="owner-actions corner-all"> 
+<%= link_to_if(current_user && @venue.created_by?(current_user), "Add New Location", new_venue_path(:add_location => 'true', :parent_id => @venue.id )) do "" end %>
+ </div>
+ <div id="details-left">
 <div class='venue-description'><%= @venue.description.capitalize %></div>
 <div class='venue-categories'>Categories: <%= @venue.display_categories %></div>
+</div>
+<div id ='venue-contact'>
+        <fieldset>
+        <LEGEND ACCESSKEY=C>Contact</LEGEND>
+          Address: <br/>
+          <%= @venue.display_full_address %><br/><br/>
+          Website: <br/>
+          <%= @venue.url %><br/><br/>
+          Phone: <br/>
+          <%= @venue.phone %><br/><br/>
+          <%= @venue.email %>
+        </fieldset>
+ </div>
 <div id="ratings-area_<%= @venue.id %>" class="ratings-area">
 <%= render_rating(@venue) %>
 </div>

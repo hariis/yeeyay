@@ -50,6 +50,11 @@
   <div id="logo"><a href="/"><img src="/images/logo-white.png" alt="YeeYaY logo" /></a></div>
 <div id="header-links" class="corner-all">
 <ul>
+<% if current_user && current_user.has_role?('admin') %>
+<div id="ad-features"   class="corner-all">    
+    <li>    <%= link_to "Show All Venues", all_venues_path %>    </li>    
+  </div>
+<% end %>
 <div id="search-prompt"   class="corner-all">
     <li> <%= link_to 'Search', venues_path  %></li>
   </div>

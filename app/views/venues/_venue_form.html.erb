@@ -3,29 +3,43 @@
     :message => "Please check the following field(s)" %>
   <div id='venue-basic'>
   <p><%= f.label :name -%><br/>
-  <%= f.text_field :name, :size => '66',:maxlength => '50'  -%>
+  <% if @add_location %>
+  <%= f.text_field :name, :size => '66',:maxlength => '50', :readonly => "#{@add_location}", :class => 'grayed' -%>
+  <% else %>
+   <%= f.text_field :name, :size => '66',:maxlength => '50' -%> 
+   <% end %>
   </p>
   <p><%= f.label :description -%><br/>
-  <%= f.text_area :description, :rows => '5',:cols => '63' -%>
+<% if @add_location %>
+  <%= f.text_area :description, :rows => '5',:cols => '63' , :readonly => "#{@add_location}", :class => 'grayed'  -%>
+  <% else %>
+  <%= f.text_area :description, :rows => '5',:cols => '63'  -%>   
+  <% end %>
   </p>
  
   <p><%= f.label :street_address , 'Street Address' -%><br/>
   <%= f.text_field :street_address, :size => '66',:maxlength => '70' -%>
   </p>
-  
+   <p><%= f.label :city_state_zip , 'City, State, Zipcode' -%><br/>
+  <%= f.text_field :city_state_zip, :size => '66',:maxlength => '70' -%>( Format: Portland , OR , 97222 )
+  </p>
   <p><%= f.label :url , 'Website' -%><br/>
   <%= f.text_field :url , :size => '66',:maxlength => '70' -%>
   </p>
   <p><%= f.label :phone , 'Contact Phone' -%><br/>
   <%= f.text_field :phone , :size => '15',:maxlength => '12' -%>
-  ( just the 10 digits - no hypens or braces )
+  ( Format: 503-123-4567 )
   </p>
   <p><%= f.label :email , 'Contact Email' -%><br/>
   <%= f.text_field :email , :size => '66',:maxlength => '70' -%>
   </p>
            <div>
-          <% if controller.action_name == 'new' %>
-                <%= f.submit "Add Venue", :class => "ui-state-default ui-corner-all"  -%>             
+          <% if controller.action_name == 'new' ||  controller.action_name == 'create' %>
+                <% if @add_location %>
+                    <%= f.submit "Add Location", :class => "ui-state-default ui-corner-all"  -%> 
+                <% else %>
+                   <%= f.submit "Add Venue", :class => "ui-state-default ui-corner-all"  -%> 
+                <% end %>                    
           <% else %>                
                 <%= f.submit "Update Venue" -%>                
           <% end %>

@@ -6,7 +6,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users
 
   map.root :controller => 'venues'
-  map.resources :venues, :has_many => :venue_reviews,:member => { :rate => :put }, :collection => {:find => :get, :saved_venues => :get}
+  map.resources :venues, :has_many => :venue_reviews,:member => { :rate => :put }, :collection => {:find => :get, :saved_venues => :get, :all => :get}
   
   map.resources :events, :has_many => :event_reviews,:member => { :rate => :put }, :collection => {:find => :get, :flag => :get, :saved_events => :get}
   map.resources :categories

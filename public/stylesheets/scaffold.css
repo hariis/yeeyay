@@ -31,6 +31,12 @@ color:#2081db;
     clear:right;
     padding:0 6px;
 }
+.owner-actions {
+ float:right;
+ background-color: #BADCFF;
+ padding: 3px;
+ margin-right: 3px;
+}
 #item-actions ul li{
     display: inline;    
 }
@@ -49,16 +55,16 @@ color:#2081db;
 #non-member li a:hover{
     background-color:#f52c2c;
 }
-#search-prompt li a, #search-prompt li a:visited{
+#search-prompt li a, #search-prompt li a:visited, #ad-features li a, #ad-features li a:visited{
     color:#fff;
 }
-#search-prompt li a:hover{
+#search-prompt li a:hover, #ad-features li a:hover{
     background-color:#9933ff;
 }
 #header-links ul li {
 display:inline;
 }
-#search-prompt{
+#search-prompt, #ad-features{
     background-color: #b875fb;
     color: #fff;   
     padding: 6px;
@@ -141,6 +147,9 @@ text-decoration: none;
 .user-venue-list ul li a{
     color:green;
 }
+#logo a, #logo a:visited {
+   padding:0px;
+}
 a, a:visited {
     text-decoration:underline;
     color:#0087B3;
@@ -164,6 +173,15 @@ div#logo a:hover {
 }
 form#find_input {
 padding:5px;
+}
+#extra-message{
+	background-color:#55fa55;
+	padding:5px;
+	margin:20px 0px;
+	clear:both;
+	color:#666666;
+	text-align:center;
+        font-size: 18px;
 }
 #heading {
 	font-size: 18px;
@@ -215,6 +233,7 @@ background-color: #9eee6a;
 width: 10%;
 padding: 15px;
 margin-left: 50px;
+line-height: 1.2em;
 }
 #event-notify{
 float:right;
@@ -222,6 +241,10 @@ background-color: #9eee6a;
 width: 10%;
 padding: 15px;
 margin-right: 50px;
+line-height: 1.2em;
+}
+#notify a , #notify a:visited, #event-notify a , #event-notify a:visited {
+    padding: 0px;
 }
 #listings {
     float:left;
@@ -408,6 +431,17 @@ div.show-venue-name {
         clear:both;
         float:left;
 }
+#details-left {
+float: left;
+width: 66%;
+clear:left;
+}
+#venue-contact {
+  float: right;
+  width: 20em;
+  padding: 5px;
+  color: #0087B3;
+}
 .lead{
 float:left;
 width:100px;
@@ -485,7 +519,15 @@ padding: 15px;
 margin:15px 165px;
 }
 #category-display {
-	height: 887px;
+	height: 1000px;
+}
+#search-by-name{
+     padding: 7px;
+     margin-bottom: 5px;
+}
+#search-by-name input.find-button {
+   height: 28px;
+   margin:0px;
 }
 #ev-category-display {
 	height: 712px;
@@ -546,7 +588,7 @@ margin:15px 165px;
 }
 #group_9 {
 	background-color: #b4e15e;
-	width:192px;
+	width:195px;
 	float: left;
 	padding: 10px;
          margin-top: 3%;
@@ -605,7 +647,7 @@ margin:15px 165px;
 }
 #group_6 {
 	background-color: #ffbfee;
-	width:170px;
+	width:175px;
 	float: left;
 	padding: 10px;
 	margin-top: 3%;
@@ -709,4 +751,7 @@ margin-top: 10px;
 padding: 5px;
 border-top: 2px solid #0087B3;
 margin-top: 10px;
+}
+.grayed {
+background-color: #ccccff;
 }

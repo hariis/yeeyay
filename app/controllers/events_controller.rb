@@ -3,8 +3,8 @@ class EventsController < ApplicationController
   include Geokit::Mappable
   include ERB::Util
   
-  before_filter :require_user  , :only => [:new, :create, :edit, :update, :destroy] 
-  before_filter :load_user, :only => [:new, :create, :edit, :update, :destroy]
+  before_filter :require_user  , :except => [:index, :show, :find ]   #, :only => [:new, :create, :edit, :update, :destroy] 
+  before_filter :load_user   , :except => [:index, :show, :find ]      #, :only => [:new, :create, :edit, :update, :destroy]
   layout :choose_layout
   
   def load_user
@@ -252,7 +252,7 @@ class EventsController < ApplicationController
     #Plot all the events on the map    
     @events.each do |event|      
     info = (<<EOS
-<b>#{event.title}</b><br/><br/><em>#{event.venue.street_address}</em><br/><br/><br/><a href="http://maps.google.com/maps?saddr=#{u(@home.to_geocodeable_s)}&daddr=#{u(event.venue.street_address)}>Get Directions</a>                    
+<b>#{event.title}</b><br/><br/><em>#{event.venue.full_address}</em><br/><br/><br/><a href="http://maps.google.com/maps?saddr=#{u(@home.to_geocodeable_s)}&daddr=#{u(event.venue.full_address)}>Get Directions</a>                    
 EOS
 )                         
          @map.overlay_init(GMarker.new([event.latitude,event.longitude],  :title => event.title,   :info_window => info))    

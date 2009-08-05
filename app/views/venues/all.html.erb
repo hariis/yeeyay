@@ -1,24 +1,11 @@
-<%= GMap.header %>
-<%= @map.to_html if @map != nil %>
+
 
 <div id="search-results">
-<% if @home  && @home.success   %>  
-    <% count_s = @venues ?  pluralize(@venues.size, 'Venue' ) : "None" %>
-    <% cat_s = "" %>
-    <% cat_s = @categories == "" ?  "   <span class='keyword-highlight'>(No categories chosen)</span>"  : " related to " + "<span class='keyword-highlight'>"  + @categories + "</span>" if !@search_by_name %>
-    <div id="heading"> <%= count_s + " found around " + "<span class='keyword-highlight'>" + @zipcode + "</span>" + cat_s   %> </div>
+  
+<% count_s = @venues ?  pluralize(@venues.size, 'Venue' ) : "None" %>
+<div id="heading"> <%= count_s + " found around "  %> </div>
 
 
-    <% if @extra_message.length != 0 %>
-      <div id="extra-message">
-        <%= @extra_message %>
-        </div>
-    <% end %>
-    <!-- This is the element in which the map will be displayed. -->
-    <% if @venues.size > 0 %>
-    <%= @map.to_html %>
-     <%= @map.div(:width => 400, :height => 300) %>
-    <% end %> 
     <ul id="listings">                
       <% for venue in @venues %>    
                <li id= "<%= venue.id %>" class ="<%= cycle('venue-listing-odd', 'venue-listing-even') %>">
@@ -61,25 +48,5 @@
 <% end %>
   </ul>  
 
-  <% if !@search_by_name %>
-         <div id="notify" class ='corner-all' >
-             <% if current_user %>  
-                    <% if current_user.is_subscribed_to_venues(@query_id) %>
-                      You are already subscribed to this query.
-                    <% else %>
-                        <%= link_to_remote "Notify", :url => {:action => 'notify', :query_id => @query_id, :count => @venues.size } %>
-                      me when more venues are added for this search query.
-                    <% end %>     
-            <% else %>    
-                 <%= link_to "Become a member", new_account_path %> or <%= link_to "login", new_user_session_path %> to get notified when more venues are added for this search query.
-            <% end %>
-        </div> 
-<% end %>  
-  <% else %>
-        <% if @extra_message.length != 0 %>
-          <div id="extra-message">
-            <%= @extra_message %>
-            </div>
-        <% end %>
-  <% end %>
+
 </div>

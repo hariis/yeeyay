@@ -8,9 +8,15 @@
   <button  id="button" class="ui-state-default ui-corner-all" type="button">Next >></button>
   </div>
 <div class="toggler">
+  <div id="search-by-name"  class="ui-widget-header ui-corner-all"  style="display: none;">
+    Search by Name:<%= text_field_tag :search_for, "" , :size => 30, :maxlength => 30 %>            
+     <%= submit_tag 'Show Venues' , :name => 'byname',:disable_with => "Finding...", :class => "find-button ui-state-default ui-corner-all" %>        
+  </div>
+  <span id="or" style="margin: 10%  50%;display: none; font-style:italic; font-weight:bold;font-size:20px;">Or</span>
   <div id='category-display' style="display: none;" class="ui-widget-content ui-corner-all">
+
           <p>          
-          <h3 class="ui-widget-header ui-corner-all">What kind of a Venue are you looking for? </h3>
+          <h3 class="ui-widget-header ui-corner-all">Choose the Categories of  Venues you looking for </h3>
      
             <% Category.for_venues_by_groups.each do |item| %>
               <% group = item[0] %>
@@ -25,10 +31,10 @@
               </div>
             <% end %>         
           </p>
-          <div style ="clear:both;">
-        <%= submit_tag 'Find Venues >>' , :name => nil,:disable_with => "Finding...", :class => "find-button ui-state-default ui-corner-all" %>
-        </div>
 
+        <div style ="clear:both;">
+        <%= submit_tag 'Show Venues' , :name => 'bycat',:disable_with => "Finding...", :class => "find-button ui-state-default ui-corner-all" %>   
+        </div>
  </div> 
  </div>
   <% end -%>                

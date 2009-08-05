@@ -3,28 +3,39 @@ class VenuesController < ApplicationController
   include Geokit::Mappable
   include ERB::Util
   
-  before_filter :require_user  , :only => [:new, :create, :edit, :update, :destroy] 
-  before_filter :load_user, :only => [:new, :create, :edit, :update, :destroy]  
+  before_filter :require_user  , :except => [:index, :show, :find ]     #:only => [:new, :create, :edit, :update, :destroy] 
+  before_filter :load_user , :except => [:index, :show, :find ]
+  before_filter :is_admin , :only => [:all]
   layout :choose_layout
   
+  def is_admin
+    current_user.has_role?('admin')
+  end
   def load_user
-     @user= current_user
+     @user = current_user
   end
   # GET /venues
   # G4
   # ET /venues.xml
   def index
-    @venues = Venue.find(:all,  :order => "created_at desc" )
+    #@venues = Venue.find(:all,  :order => "created_at desc" )
     # Create a new map object, also defining the div ("map") 
    # where the map will be rendered in the view
-  @map = GMap.new("map")
+   #@map = GMap.new("map")
   
     respond_to do |format|
-      format.html # index.html.erb
+      format.html # index.html.erb   Gets rendered entirely from the application layout
       format.xml  { render :xml => @venues }
     end
   end
-
+ def all
+	 @venues = Venue.find(:all,  :order => "created_at desc" )         
+  
+	respond_to do |format|
+	  format.html 
+	  format.xml  { render :xml => @venues }
+	end
+ end
   # GET /venues/1
   # GET /venues/1.xml
   def show
@@ -42,7 +53,14 @@ class VenuesController < ApplicationController
   def new
     @venue = Venue.new
     @categories = Category.for_venues_by_groups
-    
+    @add_location = params[:add_location] != nil ? true : false
+    if (@add_location)
+      parent_venue = Venue.find(params[:parent_id])
+        #@venue = parent_venue.clone
+	@venue.name = parent_venue.name
+       @venue.description = parent_venue.description
+	@venue.categories = parent_venue.categories
+    end
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @venue }
@@ -80,8 +98,9 @@ class VenuesController < ApplicationController
     @owner = @venue.created_by?(current_user)
     if @owner      
       #update the lat and lng
-      if @venue.street_address != params[:venue][:street_address].to_s
-         result = MultiGeocoder.geocode(params[:venue][:street_address]) if params[:venue][:street_address] != nil
+      complete_address = params[:venue][:street_address].to_s + " , " +   params[:venue][:city_state_zip].to_s
+      if @venue.full_address != complete_address
+         result = MultiGeocoder.geocode(complete_address) if complete_address != nil
          @venue.latitude, @venue.longitude = result.lat, result.lng
       end    
     end  
@@ -108,73 +127,22 @@ class VenuesController < ApplicationController
   
   def find
      @venues = []
-    #This performs an OR query - Venues found may have one or more of the asked for categories
-    #~ chosen_cats = Category.find([20,40,41])
-    #~ @venues = {}
-    #~ chosen_cats.each {|cat|  
-        #~ cat.venues.each {|venue|
-        #~ @venues[venue] = ""
-        #~ }
-         
-    #~ }
-    #This performs an AND query 
-    #~ @venues = Venue.find_by_sql "SELECT venues.* FROM venues INNER JOIN
-    #~ categories_venues cv1 ON venues.id = cv1.venue_id INNER JOIN
-    #~ categories_venues cv2 ON venues.id = cv2.venue_id INNER JOIN
-    #~ categories_venues cv3 ON venues.id = cv3.venue_id WHERE
-    #~ cv1.category_id = 41 AND cv2.category_id = 40 AND cv3.category_id = 2"
-    
-    #~ This performs an OR query - Venues found may have one or more of the asked for categories
-    #~ @venues = Venue.find_by_sql "SELECT DISTINCT venues.* FROM venues INNER JOIN
-    #~ categories_venues cv1 ON venues.id = cv1.venue_id WHERE
-    #~ cv1.category_id IN (2,40, 41)"
-
-   #Finding All Points Within a Specified Radius
+     
+     #Finding All Points Within a Specified Radius
    @home = MultiGeocoder.geocode(params[:zipcode]) 
-    if @home   
-        #Store the home as a cookie
-        session[:home] = params[:zipcode]
-        #Find the venues
+    if @home  && @home.success           
+        session[:home] = params[:zipcode]        
         @zipcode = params[:zipcode]
-        venues = Venue.find(:all, :origin => @home, :within => 25, :order => 'rating_avg desc' ) 
-        venue_ids =venues.map { |i| i.id } if venues            
         
-       #Initialize with all the venues                
-       @venues = venues
-                   
-        #Now Filter them by the categories chosen
-        @categories = ""
-        category_ids = params[:venue][:category_ids] if params[:venue]
-        if venue_ids.size > 0 
-             #Narrow them down by the categories chosen
-              if category_ids != nil                  
-                    #ANDing the Categories
-                    inner_join_string = ""
-                    where_clause_string = " WHERE cv0.category_id = #{category_ids[0]}"
-                    category_ids.each { |cat|
-                        @categories += Category.find_by_id(cat, :select => :name).name + " , "
-                        inner_join_string += " INNER JOIN categories_venues cv#{category_ids.index(cat)} ON venues.id = cv#{category_ids.index(cat)}.venue_id "
-                        where_clause_string += " AND cv#{category_ids.index(cat)}.category_id = #{cat}" if category_ids.index(cat) > 0
-                    }
-
-                    @venues = Venue.find_by_sql "SELECT venues.* FROM venues  #{inner_join_string}   #{where_clause_string}  AND venues.id IN (#{venue_ids.join(',')}) order by rating_avg desc limit 50"
-                    @categories.chomp!(" , ")             
-              end
+        if params[:bycat]
+	   find_by_cat
+	else params[:byname]
+	   find_by_name
         end
-       
-       if @zipcode && @venues.size < 50
-              #Fill up the map
-              fill_map
-       else
-             #If there are more than 50 venues, then we don't want to display the map as there may be some performance issues
-             @map = nil
-       end  
-       #store an identifiable string for this query    
-	if category_ids != nil       
-	    @query_id = @zipcode + "+" + category_ids.join('+') 
-	else
-	  @query_id = @zipcode
-	end
+	
+    else
+         #No home info entered or incorrect info entered
+	 @extra_message = "Ooops! <br/>Your location could not be identified. Please check your zipcode and try again."
     end   
     
     respond_to do |format|
@@ -195,7 +163,54 @@ class VenuesController < ApplicationController
 #          cv1.category_id = 41 AND cv2.category_id = 40 AND cv3.category_id = 2"
     
   end
-  
+  def find_by_cat
+	#Now Filter them by the categories chosen
+        @categories = ""
+        category_ids = params[:venue] ?  params[:venue][:category_ids] : nil
+	@venues, @all_venues, @categories = Venue.find_by_cat(@home,category_ids)      
+               
+       if @zipcode && @venues.size < 50
+              #Fill up the map
+              fill_map
+       else
+             #If there are more than 50 venues, then we don't want to display the map as there may be some performance issues
+             @map = nil
+       end  
+       #store an identifiable string for this query    
+	if category_ids != nil   && category_ids.length > 0    
+	    @query_id = @zipcode + "+" + category_ids.join('+') 
+	else
+	  @query_id = @zipcode
+	end
+	
+      @extra_message = ""
+        if @venues.size == 0 && @all_venues.size > 0
+	   @extra_message = "Tip: <br/>No venues were found that matched all your categories, however there are #{@all_venues.size} venues around #{@zipcode}. <br/>
+	                                       You may broaden your search by unchecking some categories."
+        end
+	if @venues.size > 20 
+	   @extra_message = "Tip: <br/>More than 20 venues were found that matched all your categories. <br/>
+	                                       To see targeted results, you may narrow your search by selecting more categories."
+        end
+  end
+  def find_by_name
+	@search_by_name = params[:search_for] && params[:search_for].strip.length > 0 ? params[:search_for].strip : nil
+	@extra_message = ""
+	if (@search_by_name)
+	  @venues = Venue.find_by_name(@home,@search_by_name) 
+	else
+	  @extra_message = "Please type a venue name, even part of it is Ok! and try again"
+	end
+    
+       if @zipcode && @venues.size < 50
+              #Fill up the map
+              fill_map
+       else
+             #If there are more than 50 venues, then we don't want to display the map as there may be some performance issues
+             @map = nil
+       end  
+       
+  end
   def rate
     @venue = Venue.find(params[:id])
     rating= params[:rate].to_i
@@ -294,12 +309,12 @@ class VenuesController < ApplicationController
       for venue in @venues 
         if @home
         info = (<<EOS
-<b>#{venue.name}</b><br/><br/><em>#{venue.street_address}</em><br/><br/><br/><a href="http://maps.google.com/maps?saddr=#{u(@home.to_geocodeable_s)}&daddr=#{u(venue.street_address)}>Get Directions</a>                    
+<b>#{venue.name}</b><br/><br/><em>#{venue.full_address}</em><br/><br/><br/><a href="http://maps.google.com/maps?saddr=#{u(@home.to_geocodeable_s)}&daddr=#{u(venue.full_address)}>Get Directions</a>                    
 EOS
     )    
         else
           info = (<<EOS
-<b>#{venue.name}</b><br/><br/><em>#{venue.street_address}</em><br/><br/><br/>                   
+<b>#{venue.name}</b><br/><br/><em>#{venue.full_address}</em><br/><br/><br/>                   
 EOS
     )    
         end
@@ -326,9 +341,9 @@ EOS
   def choose_layout    
     if [ 'new', 'edit','create','update', 'destroy', 'show','rate','saved_venues' ].include? action_name
       'venues'
-    elsif ['find'].include? action_name
+    elsif ['find', 'all'].include? action_name
     'eventsjq'    
-    else
+    else #index
       'application'  #the one with search tabs
     end
   end

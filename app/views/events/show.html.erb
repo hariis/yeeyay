@@ -31,7 +31,7 @@
 </ul>
 </div>
 <div class='venue-description'>What: <%= @event.details.capitalize %></div>
-<div class='event-location'>Where: <%= @event.venue.name + "<br/>" + @event.venue.street_address %></div>
+<div class='event-location'>Where: <%= @event.venue.name + "<br/>" + @event.venue.display_full_address %></div>
 <div class='event-schedule'>When: <%= display_schedule(@event) %> </div>
 <div class='venue-categories'>Categories: <%= @event.display_categories %></div>
 

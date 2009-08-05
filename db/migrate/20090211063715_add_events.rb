@@ -13,7 +13,7 @@ class AddEvents < ActiveRecord::Migration
 			
           t.text :details, :null => false
           t.integer :venue_id 
-          t.float :latitude, :longitude, :null => false
+          t.decimal :latitude, :longitude, :null => false,  :precision => 15, :scale => 10   
 	  t.integer :added_by, :null => false
           t.integer :one_week_schedule 
           t.boolean :is_expired , :default => false

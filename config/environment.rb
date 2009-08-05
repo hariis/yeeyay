@@ -74,7 +74,7 @@ Rails::Initializer.run do |config|
   # config.active_record.observers = :cacher, :garbage_collector, :forum_observer  
 
   #config.action_view.erb_trim_mode = ">" 
-  config.gem "andre-geokit" , :source => 'http://gems.github.com' 
+  #config.gem "andre-geokit" , :source => 'http://gems.github.com' 
   config.gem "authlogic"
   config.gem "calendar_date_select"
   config.gem "chronic"

@@ -8,7 +8,8 @@ class CreateVenues < ActiveRecord::Migration
       t.text   :highlights
       t.string :url, :phone, :email
       t.string :street_address, :null => false
-      t.float :latitude, :longitude, :null => false
+      t.string :city_state_zip, :null => false
+      t.decimal :latitude, :longitude, :null => false,  :precision => 15, :scale => 10      
       t.integer :added_by, :null => false
       t.timestamps
     end
