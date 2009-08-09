@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'venues'
   map.resources :venues, :has_many => :venue_reviews,:member => { :rate => :put }, :collection => {:find => :get, :saved_venues => :get, :all => :get}
   
-  map.resources :events, :has_many => :event_reviews,:member => { :rate => :put }, :collection => {:find => :get, :flag => :get, :saved_events => :get}
+  map.resources :events, :has_many => :event_reviews,:member => { :rate => :put }, :collection => {:find => :get, :flag => :get, :saved_events => :get, :all => :get}
   map.resources :categories
   map.resource :user_session
   map.resources :password_resets

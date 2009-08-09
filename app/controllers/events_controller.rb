@@ -5,6 +5,7 @@ class EventsController < ApplicationController
   
   before_filter :require_user  , :except => [:index, :show, :find ]   #, :only => [:new, :create, :edit, :update, :destroy] 
   before_filter :load_user   , :except => [:index, :show, :find ]      #, :only => [:new, :create, :edit, :update, :destroy]
+  before_filter :is_admin , :only => [:all]
   layout :choose_layout
   
   def load_user
@@ -20,7 +21,15 @@ class EventsController < ApplicationController
       format.xml  { render :xml => @events }
     end
   end
-
+  
+   def all
+	 @events = Event.find(:all,  :order => "created_at desc" )         
+  
+	respond_to do |format|
+	  format.html 
+	  format.xml  { render :xml => @events }
+	end
+ end
   # GET /events/1
   # GET /events/1.xml
   def show
@@ -190,53 +199,16 @@ class EventsController < ApplicationController
     @events = []
     #Finding All Points Within a Specified Radius
     @home = MultiGeocoder.geocode(params[:zipcode]) 
-    if @home   
-        #Find the events
+    if @home  && @home.success
+        session[:home] = params[:zipcode]           
         @zipcode = params[:zipcode]
-        events = Event.find(:all, :origin => @home, :within => 25, :conditions => ['one_week_schedule > ?',0], :order => 'rating_avg desc', :include => 'venue' ) 
-        event_ids =events.map { |i| i.id } if events            
-        
-       #Initialize with all the events                
-       @events = events
-                   
-        #Now Filter them by the categories chosen
-        @categories = ""
-        if event_ids.size > 0 
-             #Narrow them down by the categories chosen
-             category_ids = params[:event][:category_ids] if params[:event]
-
-              if category_ids != nil                  
-                    #ANDing the Categories
-                    inner_join_string = ""
-                    where_clause_string = " WHERE cv0.category_id = #{category_ids[0]}"
-                    category_ids.each { |cat|
-                        @categories += Category.find_by_id(cat, :select => :name).name + " , "
-                        inner_join_string += " INNER JOIN categories_events cv#{category_ids.index(cat)} ON events.id = cv#{category_ids.index(cat)}.event_id "
-                        where_clause_string += " AND cv#{category_ids.index(cat)}.category_id = #{cat}" if category_ids.index(cat) > 0
-                    }
-
-                    @events = Event.find_by_sql "SELECT events.* FROM events  #{inner_join_string}   #{where_clause_string}  AND events.id IN (#{event_ids.join(',')}) order by rating_avg desc limit 50"
-                    @categories.chomp!(" , ")             
-              end
-        end
-       if @zipcode && @events.size > 0
-         @events_calendar = Event.get_one_week_calendar_for(@events)
-       end
-      
-      
-       if @zipcode && @events.size < 50
-              fill_map
-       else
-             #If there are more than 50 events, then we don't want to display the map as there may be some performance issues
-             @map = nil
-       end    
+	
+        if params[:bycat]
+	   find_by_cat
+	else params[:byname]
+	   find_by_name
+        end      
        
-       #store an identifiable string for this query    
-	if category_ids != nil       
-	    @query_id = @zipcode + "+" + category_ids.join('+') 
-	else
-	  @query_id = @zipcode
-	end
     end   
     respond_to do |format|
         format.html 
@@ -244,6 +216,59 @@ class EventsController < ApplicationController
         format.js {render :partial => 'find', :locals => {:events => @events }}
     end
   end
+  def find_by_cat
+	#Now Filter them by the categories chosen
+        @categories = ""
+        category_ids = params[:event] ?  params[:event][:category_ids] : nil
+	@events, @all_events, @categories = Event.search_by_cat(@home,category_ids)      
+               
+       if @zipcode && @events.size < 50             
+              fill_map
+       else
+             #If there are more than 50 venues, then we don't want to display the map as there may be some performance issues
+             @map = nil
+       end  
+       
+      if @zipcode && @events.size > 0
+         @events_calendar = Event.get_one_week_calendar_for(@events)
+       end 
+       
+       #store an identifiable string for this query    
+	if category_ids != nil       
+	    @query_id = @zipcode + "+" + category_ids.join('+') 
+	else
+	  @query_id = @zipcode
+	end
+	
+      @extra_message = ""
+        if @events.size == 0 && @all_events.size > 0
+	   @extra_message = "Please Note: <br/>No events were found that matched all your categories, however there are #{@all_events.size} events around #{@zipcode}. <br/>
+	                                       You may broaden your search by unchecking some categories."
+        end
+	if @events.size > 20 
+	   @extra_message = "Tip: <br/>More than 20 venues were found that matched all your categories. <br/>
+	                                       To see targeted results, you may narrow your search by selecting more categories."
+        end
+  end
+  def find_by_name
+	@search_by_name = params[:search_for] && params[:search_for].strip.length > 0 ? params[:search_for].strip : nil
+	@extra_message = ""
+	if (@search_by_name)
+	  @events = Event.search_by_name(@home,@search_by_name) 
+	else
+	  @extra_message = "Please type an event name, even part of it is Ok! and try again"
+	end
+    
+       if @zipcode && @events.size < 50
+              fill_map
+       else
+             #If there are more than 50 venues, then we don't want to display the map as there may be some performance issues
+             @map = nil
+       end  
+       
+  end
+  
+  
   def fill_map
     #Set the map
     @map = GMap.new("map")          
@@ -377,7 +402,7 @@ EOS
   def choose_layout    
     if [ 'new', 'edit','create','update', 'destroy', 'show','rate','saved_events' ].include? action_name
       'events'
-    elsif ['find'].include? action_name
+    elsif ['find', 'all'].include? action_name
       'eventsjq'
     else
       'application'

@@ -356,7 +356,7 @@ li.venue-listing-even {
         border-right:2px solid #D7D7D7;
         border-top:1px solid #D7D7D7;  
 }
-div.venue-name {
+.venue-name {
 	color: #0087b3;
 	font-weight: bold;	
 	font-size: 26px;
@@ -521,11 +521,11 @@ margin:15px 165px;
 #category-display {
 	height: 1000px;
 }
-#search-by-name{
+.search-by-name{
      padding: 7px;
      margin-bottom: 5px;
 }
-#search-by-name input.find-button {
+.search-by-name input.find-button {
    height: 28px;
    margin:0px;
 }

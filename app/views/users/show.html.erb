@@ -26,7 +26,7 @@
 <div class="box-heading venue-heading">Favorite Venues</div>
 <ul>
 <% Venue.recommended_by(@user).each do |venue| %>
-   <li class='venue-name'><%= link_to venue.name, venue_path(venue) %><span style ="font-size:10px;margin-left:30px;"> </span>  </li>
+   <li class=''><%= link_to venue.name, venue_path(venue) %><span style ="font-size:10px;margin-left:30px;"> </span>  </li>
  <% end %>
  </ul>
 </div>
@@ -34,7 +34,7 @@
 <div class="box-heading venue-heading">Submitted Venues</div>
 <ul>
 <% Venue.added_by(@user).each do |venue| %>
-   <li class='venue-name'><%= link_to venue.name, venue_path(venue) %><span style ="font-size:10px;margin-left:30px;"> </span>  </li>
+   <li class=''><%= link_to venue.name, venue_path(venue) %><span style ="font-size:10px;margin-left:30px;"> </span>  </li>
  <% end %>
  </ul>
 </div>
@@ -43,7 +43,7 @@
 <div class="box-heading event-heading">Favorite Events</div>
 <ul>
 <% Event.recommended_by(@user).each do |event| %>
-   <li class='venue-name'><%= link_to event.title.capitalize, event_path(event) %><span style ="font-size:10px;margin-left:30px;"> </span>  </li>
+   <li class=''><%= link_to event.title.capitalize, event_path(event) %><span style ="font-size:10px;margin-left:30px;"> </span>  </li>
  <% end %>
  </ul>
 </div>
@@ -51,7 +51,7 @@
 <div class="box-heading event-heading">Submitted Events</div>
 <ul>
 <% Event.added_by(@user).each do |event| %>
-   <li class='venue-name'><%= link_to event.title.capitalize, event_path(event) %><span style ="font-size:10px;margin-left:30px;"> </span>  </li>
+   <li class=''><%= link_to event.title.capitalize, event_path(event) %><span style ="font-size:10px;margin-left:30px;"> </span>  </li>
  <% end %>
  </ul>
 </div>

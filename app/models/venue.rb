@@ -153,7 +153,7 @@ class Venue < ActiveRecord::Base
     return venues
   end  
   
-  def self.find_by_cat(home,category_ids)
+  def self.search_by_cat(home,category_ids)
            #Finding All Points Within a Specified Radius	   
 	    if home  
 		#Find the venues
@@ -186,7 +186,7 @@ class Venue < ActiveRecord::Base
 	   return  venues_by_cat, venues, cat_names
   end
   
-  def self.find_by_name(home,search_for)	
+  def self.search_by_name(home,search_for)	
 	  if home && search_for.length > 0				
 	      return Venue.find(:all, :origin => home, :within => 25, :conditions=> ["name like ?", '%' + search_for + '%'])
 	  end  

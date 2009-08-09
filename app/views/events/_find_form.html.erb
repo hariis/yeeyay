@@ -5,9 +5,13 @@
   <div id='zip-display'><p><span style ="font-size:14px;text-align:center;font-weight:bold;letter-spacing:1px;">Your Zipcode: </span>
   <%= text_field_tag :zipcode, "" , :size => 7, :maxlength => 5 %> 
     <button  id="ev-button" class="ui-state-default ui-corner-all" type="button">Next >></button>
-  </p>
   </div>
 <div class="toggler">
+<div class="search-by-name ui-widget-header ui-corner-all"  style="display: none;">
+    Search by Name:<%= text_field_tag :search_for, "" , :size => 30, :maxlength => 30 %>            
+     <%= submit_tag 'Show Events' , :name => 'byname',:disable_with => "Finding...", :class => "find-button ui-state-default ui-corner-all" %>        
+  </div>
+  <span class="or" style="margin: 10%  50%;display: none; font-style:italic; font-weight:bold;font-size:20px;">Or</span>
   <div id='ev-category-display' style="display: none;" class="ui-widget-content ui-corner-all">
           <p>
           <h3 class="ui-widget-header ui-corner-all">What kind of an Event are you looking for? </h3>
@@ -26,7 +30,7 @@
             <% end %>         
           </p>
           <div style ="clear:both;">
-        <%= submit_tag 'Find Events >>' , :name => nil,:disable_with => "Finding...", :class => "find-button ui-state-default ui-corner-all" %>
+        <%= submit_tag 'Show Events' , :name => 'bycat',:disable_with => "Finding...", :class => "find-button ui-state-default ui-corner-all" %>
         </div>
 
  </div> 

@@ -17,6 +17,7 @@ class AddEvents < ActiveRecord::Migration
 	  t.integer :added_by, :null => false
           t.integer :one_week_schedule 
           t.boolean :is_expired , :default => false
+	  t.timestamps
      end
     create_index(:events, :title, :start_dt_tm)
     foreign_key(:events, :added_by, :users) 

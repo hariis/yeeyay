@@ -2,17 +2,27 @@
 <%= @map.to_html if @map != nil %>
 
 <div id="search-results">
- 
+<% if @home  && @home.success   %>  
+  
 <% count_s = @events ?  pluralize(@events.size, 'Event' ) : "None" %>
-<% cat_s = @categories == "" ?  "   <span class='keyword-highlight'>(No categories chosen)</span>"  : " related to " + "<span class='keyword-highlight'>"  + @categories + "</span>" %>
-<div id="heading"> <%= count_s + " happening around " + "<span class='keyword-highlight'>" + @zipcode + " in the next week "+"</span>" + cat_s   %> </div>
+ <% cat_s = "" %>
+<% cat_s = @categories == "" ?  "   <span class='keyword-highlight'>(No categories chosen)</span>"  : " related to " + "<span class='keyword-highlight'>"  + @categories + "</span>" if !@search_by_name  %>
+<div id="heading"> <%= count_s + " happening around " + "<span class='keyword-highlight'>" + @zipcode + " in the next week "+"</span>" + cat_s    if !@search_by_name  %> 
+ <%= count_s + " happening around " + "<span class='keyword-highlight'>" + @zipcode + "</span>" + " that matches " + "<span class='keyword-highlight'>" + params[:search_for]  + "</span>"   if   @search_by_name  %> </div>
 
+   <% if @extra_message.length != 0 %>
+      <div id="extra-message">
+        <%= @extra_message %>
+        </div>
+    <% end %>
+    
 <!-- This is the element in which the map will be displayed. -->
 <% if @events.size > 0 %>
 <%= @map.to_html %>
  <%= @map.div(:width => 400, :height => 300) %>
  <% end %>
- 
+
+<% if !@search_by_name %>
 <div id="event-notify" class ='corner-all' >
 <% if current_user %>  
             <% if current_user.is_subscribed_to_events(@query_id) %>
@@ -66,6 +76,36 @@
             <% end %>         
    <% end %>
 </div>
-
+<% else %>
+  <ul id="listings">                
+      <% for event in @events %>                                      
+                        <li  class ="venue-name <%= cycle('venue-listing-odd', 'venue-listing-even') %>">
+                        <% domid = "#dialog_" + event.id.to_s  %>                        
+                        <a href="#" OnClick="DoAction('<%= domid %>');">
+                      <%=  @events.index(event) + 1%>&#046; <%= event.title.capitalize %></a> 
+                            <% if current_user && event.is_saved_by(current_user) %>
+                              <span class="save-event-listing-status save-event-status corner-all">saved</span>                      
+                            <% end %>      
+                        </li>
+                      <!-- ui-dialog -->
+                      <div id="dialog_<%= event.id.to_s %>" title="<%= event.title.capitalize %>" style="display: none;">                              
+                      <ul class="mini-details">
+                            <li class='venue-name'><span class="lead">What: </span><span class="follow"> <%= link_to event.title.capitalize, event_path(event) %></span></li>
+                            <li class='venue-description'><span class="lead">Details: </span><span class="follow"> <%= event.details.capitalize %></span></li>
+                            <li class='event-location'><span class="lead">Where:</span><span class="follow"> <%= event.venue.name + "<br/>" + event.venue.display_full_address %></span></li>
+                            <li class='event-schedule'><span class="lead">When:</span><span class="follow"> <%= display_schedule(event) %></span> </li>
+                                              
+                      </ul>
+                      </div>                  
+       <% end %>
+  </ul>  
+<% end %>
+ <% else %>
+        <% if @extra_message.length != 0 %>
+          <div id="extra-message">
+            <%= @extra_message %>
+            </div>
+        <% end %>
+  <% end %>
  
 </div>

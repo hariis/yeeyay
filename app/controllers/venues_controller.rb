@@ -8,9 +8,6 @@ class VenuesController < ApplicationController
   before_filter :is_admin , :only => [:all]
   layout :choose_layout
   
-  def is_admin
-    current_user.has_role?('admin')
-  end
   def load_user
      @user = current_user
   end
@@ -167,7 +164,7 @@ class VenuesController < ApplicationController
 	#Now Filter them by the categories chosen
         @categories = ""
         category_ids = params[:venue] ?  params[:venue][:category_ids] : nil
-	@venues, @all_venues, @categories = Venue.find_by_cat(@home,category_ids)      
+	@venues, @all_venues, @categories = Venue.search_by_cat(@home,category_ids)      
                
        if @zipcode && @venues.size < 50
               #Fill up the map
@@ -197,7 +194,7 @@ class VenuesController < ApplicationController
 	@search_by_name = params[:search_for] && params[:search_for].strip.length > 0 ? params[:search_for].strip : nil
 	@extra_message = ""
 	if (@search_by_name)
-	  @venues = Venue.find_by_name(@home,@search_by_name) 
+	  @venues = Venue.search_by_name(@home,@search_by_name) 
 	else
 	  @extra_message = "Please type a venue name, even part of it is Ok! and try again"
 	end

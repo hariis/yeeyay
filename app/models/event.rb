@@ -160,6 +160,41 @@ class Event < ActiveRecord::Base
     return events
   end
   
+  def self.search_by_cat(home,category_ids)
+	    #Finding All Points Within a Specified Radius	 
+           if home   
+		#Find the events		
+		events = Event.find(:all, :origin => home, :within => 25, :conditions => ['one_week_schedule > ?',0], :order => 'rating_avg desc', :include => 'venue' ) 
+		event_ids =events.map { |i| i.id } if events            
+
+	       #Now Filter them by the categories chosen
+		cat_names = ""
+		events_by_cat = []
+		if event_ids.size > 0 
+		     #Narrow them down by the categories chosen
+		      if category_ids != nil      && category_ids.length > 0               
+			    #ANDing the Categories
+			    inner_join_string = ""
+			    where_clause_string = " WHERE cv0.category_id = #{category_ids[0]}"
+			    category_ids.each { |cat|
+				cat_names += Category.find_by_id(cat, :select => :name).name + " , "
+				inner_join_string += " INNER JOIN categories_events cv#{category_ids.index(cat)} ON events.id = cv#{category_ids.index(cat)}.event_id "
+				where_clause_string += " AND cv#{category_ids.index(cat)}.category_id = #{cat}" if category_ids.index(cat) > 0
+			    }
+
+			    events_by_cat = Event.find_by_sql "SELECT events.* FROM events  #{inner_join_string}   #{where_clause_string}  AND events.id IN (#{event_ids.join(',')}) order by rating_avg desc limit 50"
+			    cat_names.chomp!(" , ")             
+		      end
+		end		       
+	    end   
+	    return events_by_cat, events, cat_names
+  end
+  def self.search_by_name(home,search_for)	
+	  if home && search_for.length > 0				
+	      return Event.find(:all, :origin => home, :within => 25, :conditions => ['is_expired = ?',0], :include => 'venue' ) 	      
+	  end  
+	  return nil
+  end
    def share_event(sent_by)
 		Notifier.deliver_share_event(self,sent_by)
    end

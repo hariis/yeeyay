@@ -117,4 +117,8 @@ class ApplicationController < ActionController::Base
 	 emailRE= /\A[\w\._%-]+@[\w\.-]+\.[a-zA-Z]{2,4}\z/
 	 return email =~ emailRE
    end
+   
+   def is_admin
+    current_user.has_role?('admin')
+  end
 end
