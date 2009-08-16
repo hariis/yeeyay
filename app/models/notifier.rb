@@ -1,9 +1,9 @@
 class Notifier < ActionMailer::Base
-    default_url_options[:host] = "www.yeeyay.com"
+    default_url_options[:host] = "www.plannerbee.com"
 
   def password_reset_instructions(user)
     subject       "Password Reset Instructions"
-    from          "YeeYaY Notifier <noreply@yeeyay.com>"
+    from          "YeeYaY Notifier <noreply@plannerbee.com>"
     recipients    user.email
     sent_on       Time.zone.now
     body          :edit_password_reset_url => edit_password_reset_url(user.perishable_token)
@@ -42,8 +42,8 @@ class Notifier < ActionMailer::Base
   protected
     def setup_email(venue)
       @recipients  = "#{venue.emails}"
-      @from        = "YeeYaY <yeeyay-notifier@yeeyay.com>"
-      headers         "Reply-to" => "yeeyay-notifier@yeeyay.com"
+      @from        = "YeeYaY <yeeyay-notifier@plannerbee.com>"
+      headers         "Reply-to" => "yeeyay-notifier@plannerbee.com"
       @subject     = "[YeeYaY] "
       @sent_on     = Time.zone.now
       @content_type = "text/html"

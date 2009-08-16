@@ -20,7 +20,17 @@ config.action_controller.perform_caching             = true
 # Enable serving of images, stylesheets, and javascripts from an asset server
 # config.action_controller.asset_host                  = "http://assets.example.com"
 
-# Disable delivery errors, bad email addresses will be ignored
-# config.action_mailer.raise_delivery_errors = false
+ActionMailer::Base.delivery_method = :smtp
 
-DOMAIN = 'http://www.yeeyay.com/'
+ActionMailer::Base.smtp_settings = {
+   :address => "smtp.plannerbee.com",
+   :port => 25,
+   :domain => "plannerbee.com",
+   :authentication => :login,
+   :user_name => "hariis",
+   :password => "jayam4rama",
+}
+# Disable delivery errors, bad email addresses will be ignored
+ config.action_mailer.raise_delivery_errors = false
+
+DOMAIN = 'http://www.plannerbee.com/'
