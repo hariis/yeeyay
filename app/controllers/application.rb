@@ -111,13 +111,30 @@ class ApplicationController < ActionController::Base
    end         
    def validate_ab_style_email(email)
         email.gsub!(/\A"/, '\1')	 
-	 str = email.split(/ /)		 
-	 str.delete_if{|x| x== ""}
-	 email = str[str.size-1].delete "<>"
-	 emailRE= /\A[\w\._%-]+@[\w\.-]+\.[a-zA-Z]{2,4}\z/
-	 return email =~ emailRE
+         str = email.split(/ /)
+         str.delete_if{|x| x== ""}
+         email = str[str.size-1].delete "<>"
+         emailRE= /\A[\w\._%-]+@[\w\.-]+\.[a-zA-Z]{2,4}\z/
+         return email =~ emailRE
    end
-   
+   def string_to_array(stringitem)
+                #Parse the string into an array
+              valid_array =[]
+              return if stringitem == nil
+              valid_array.concat(stringitem.split(/,/))
+
+              # delete any blank emails
+              valid_array = valid_array.delete_if { |t| t.empty? }
+
+              # trim spaces around all tags
+              valid_array = valid_array.map! { |t| t.strip }
+
+              # downcase all tags
+              valid_array = valid_array.map! { |t| t.downcase }
+
+              # remove duplicates
+              valid_array = valid_array.uniq
+    end
    def is_admin
     current_user.has_role?('admin')
   end
