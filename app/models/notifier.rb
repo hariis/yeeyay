@@ -23,7 +23,7 @@ class Notifier < ActionMailer::Base
   
     @body[:name]  = venue.name
     @body[:url] = venue.url
-    @body[:yeeyay_url] = "http://www.yeeyay.com/venues/" + venue.id 
+    @body[:yeeyay_url] = "http://www.yeeyay.com/venues/" + venue.id.to_s
     @body[:mycomments]  = venue.comments
     @body[:sender] = "#{sent_by.login}"
   end
@@ -33,7 +33,7 @@ class Notifier < ActionMailer::Base
   
     @body[:name]  = event.title
     @body[:venue_name] = event.venue.name
-    @body[:yeeyay_url] = "http://www.yeeyay.com/events/" + event.id 
+    @body[:yeeyay_url] = "http://www.yeeyay.com/events/" + event.id.to_s
     @body[:mycomments]  = event.comments
     @body[:event] = event
     @body[:sender] = "#{sent_by.login}"
