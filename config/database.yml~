@@ -1,6 +1,0 @@
-development:
- adapter: mysql
- database: yeeyay
- username: root
- password:
- host: localhost
