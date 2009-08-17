@@ -295,8 +295,9 @@ class VenuesController < ApplicationController
                   @status_message = "<div id='failure'>One or more of the email addresses is invalid. <br/> Please check and try again.</div>"
         end
         
-        render :text => @status_message
-
+     render :update do |page|
+	    page.replace_html 'share-form-status', @status_message
+     end
   end
   private
   def fill_map
