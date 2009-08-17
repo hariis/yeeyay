@@ -276,26 +276,28 @@ class VenuesController < ApplicationController
   end
   
    def share
-                #validate the email addresses, if any, before attempting to save 
-                #send emails
-                @venue = Venue.find_by_id(params[:id])
-                @venue.emails = params[:venue][:emails]
-                @venue.comments = params[:comments]
-                if @venue.emails.length > 0
-                      if validate_emails(@venue.emails) 
-                              #now send emails
-                              @venue.share_venue(current_user) 
-                              @status_message = "<div id='success'>Venue shared with your friends.</div>"
-                              
-                      else
-                              @status_message = "<div id='failure'>There was a problem sharing. <br/>" + @invalid_emails_message + "</div>"
-                              
-                      end
-                else
-                          @status_message = "<div id='failure'>One or more of the email addresses is invalid. <br/> Please check and try again.</div>"
-                 end		  
-       
-      end
+        #validate the email addresses, if any, before attempting to save
+        #send emails
+        @venue = Venue.find_by_id(params[:id])
+        @venue.emails = params[:venue][:emails]
+        @venue.comments = params[:comments]
+        if @venue.emails.length > 0
+              if validate_emails(@venue.emails)
+                      #now send emails
+                      @venue.share_venue(current_user)
+                      @status_message = "<div id='success'>Venue shared with your friends.</div>"
+
+              else
+                      @status_message = "<div id='failure'>There was a problem sharing. <br/>" + @invalid_emails_message + "</div>"
+
+              end
+        else
+                  @status_message = "<div id='failure'>One or more of the email addresses is invalid. <br/> Please check and try again.</div>"
+        end
+        
+        render :text => @status_message
+
+  end
   private
   def fill_map
        #Set the map
