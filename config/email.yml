@@ -1,8 +1,9 @@
 production:
-  :address: smtp.yeeyay.com
+  :address: plannerbee.com
+  :domain: plannerbee.com
   :port: 25
   :authentication: plain
-  :user_name: admin
-  :password: test
+  :user_name: hariis
+  :password: 
 
 

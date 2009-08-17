@@ -23,12 +23,12 @@ config.action_controller.perform_caching             = true
 ActionMailer::Base.delivery_method = :smtp
 
 ActionMailer::Base.smtp_settings = {
-   :address => "smtp.plannerbee.com",
+   :address => "plannerbee.com",
    :port => 25,
    :domain => "plannerbee.com",
-   :authentication => :login,
+   :authentication => :plain,
    :user_name => "hariis",
-   :password => "jayam4rama",
+   :password => "",
 }
 # Disable delivery errors, bad email addresses will be ignored
  config.action_mailer.raise_delivery_errors = false
