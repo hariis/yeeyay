@@ -366,25 +366,25 @@ EOS
        end   
   end
   def share
-                #validate the email addresses, if any, before attempting to save 
-                #send emails
-                @event = Event.find_by_id(params[:id])
-                @event.emails = params[:event][:emails]
-                @event.comments = params[:comments]
-                if @event.emails.length > 0
-                      if validate_emails(@event.emails) 
-                              #now send emails
-                              @event.share_event(current_user) 
-                              @status_message = "<div id='success'>Event shared with your friends.</div>"
-                              
-                      else
-                              @status_message = "<div id='failure'>There was a problem sharing. <br/>" + @invalid_emails_message + "</div>"
-                              
-                      end
-                else
-                          @status_message = "<div id='failure'>One or more of the email addresses is invalid. <br/> Please check and try again.</div>"
-                 end		  
-       
+      #validate the email addresses, if any, before attempting to save
+      #send emails
+      @event = Event.find_by_id(params[:id])
+      @event.emails = params[:event][:emails]
+      @event.comments = params[:comments]
+      if @event.emails.length > 0
+            if validate_emails(@event.emails)
+                    #now send emails
+                    @event.share_event(current_user)
+                    @status_message = "<div id='success'>Event shared with your friends.</div>"
+
+            else
+                    @status_message = "<div id='failure'>There was a problem sharing. <br/>" + @invalid_emails_message + "</div>"
+
+            end
+      else
+                @status_message = "<div id='failure'>One or more of the email addresses is invalid. <br/> Please check and try again.</div>"
+      end
+       render :text => @status_message
   end
   private
   # DELETE /events/1
