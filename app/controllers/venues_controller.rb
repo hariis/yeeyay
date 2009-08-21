@@ -284,9 +284,10 @@ class VenuesController < ApplicationController
         if @venue.emails.length > 0
               if validate_emails(@venue.emails)
                       #now send emails
-                      @venue.share_venue(current_user)
+                      #@venue.share_venue(@current_user)
+                      Delayed::Job.enqueue(MailingJob.new(@venue, @current_user))
+                      
                       @status_message = "<div id='success'>Venue shared with your friends.</div>"
-
               else
                       @status_message = "<div id='failure'>There was a problem sharing. <br/>" + @invalid_emails_message + "</div>"
 

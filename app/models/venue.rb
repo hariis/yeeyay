@@ -241,6 +241,7 @@ class Venue < ActiveRecord::Base
   end
   
   def share_venue(sent_by)
-		Notifier.deliver_share_venue(self,sent_by)
+		#Notifier.send_later(:deliver_share_venue,self,sent_by)
+    Notifier.deliver_share_venue(self,sent_by)
    end
 end

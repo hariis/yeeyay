@@ -56,7 +56,11 @@
 <% end %>
 
 <div id="share">
-<%= button_to_function "Share...",   visual_effect(:toggle_blind, 'share-form', :duration => 0.5) %>
+
+<%=  button_to_function "Share..." do |page|
+  page.visual_effect :toggle_slide, 'share-form'
+  page.replace_html 'share-form-status', ""
+end %>
 
         <%= image_tag 'spinner.gif', :id=>'share_spinner', :style=>"display:none;" %>
          <div id="share-form-status">  
